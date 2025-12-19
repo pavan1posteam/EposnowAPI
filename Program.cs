@@ -20,14 +20,14 @@ internal class Program
 			{
                 try
                 {
-                    if (posDetail.StoreSettings.StoreId == 12778)
+                   /* if (posDetail.StoreSettings.StoreId == 12778)
                     {
 						Console.WriteLine("Fetching store_id : " + posDetail.StoreSettings.StoreId);
                     }
                     else
                     {
 						continue;
-                    }
+                    }*/
                     if (posDetail.PosName.ToUpper() == "EPOSNOW" && posDetail.StoreSettings.POSSettings.IsApi)
 					{
 						EposnowCsvProducts eposnowCsvProducts = new EposnowCsvProducts(posDetail.StoreSettings.StoreId, posDetail.StoreSettings.POSSettings.tax, posDetail.StoreSettings.POSSettings.BaseUrl, posDetail.StoreSettings.POSSettings.Token);
