@@ -7,174 +7,204 @@ using EposNow.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using RestSharp;
-
-public class clsEposNow
+namespace EposNow.Models
 {
-    private string StoreId;
-
-    private int page = 1;
-
-    private string AccessToken = "";
-
-    public clsEposNow(int StoreId, decimal tax, string BaseUrl, string RefreshToken)
+    public class clsEposNow
     {
-        try
-        {
-            Console.WriteLine("Generating EposNow " + StoreId + " Product File....");
-            Console.WriteLine("Generating EposNow " + StoreId + " Fullname File....");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message + " EposNow " + StoreId);
-        }
-    }
+        private string StoreId;
 
-    //method for productdetails
-    public List<EposnowProdList.Root> EposnowSetting(int StoreId, decimal tax, string BaseUrl, string Token)
-    {
-        List<EposnowProdList.Root> list = new List<EposnowProdList.Root>();
-        for (int i = 1; i <= 25; i++)
-        {
-            List<EposnowProdList.Root> list2 = EposNowProduct(i, StoreId, tax, BaseUrl, Token);
-            if (list2.Count != 0)
-            {
-                list.AddRange(list2);
-                continue;
-            }
-            break;
-        }
-        return list;
-    }
+        private int page = 1;
 
-    //method for stockdetails
-    public List<EposnowStockList.Root> EposnowStockSetting(int StoreId, decimal tax, string BaseUrl, string Token)
-    {
-        List<EposnowStockList.Root> list = new List<EposnowStockList.Root>();
-        for (int i = 1; i <= 25; i++)
-        {
-            List<EposnowStockList.Root> list2 = EposNowStock(i, StoreId, tax, BaseUrl, Token);
-            if (list2.Count != 0)
-            {
-                list.AddRange(list2);
-                continue;
-            }
-            break;
-        }
-        return list;
-    }
-    // method for category saving 
-    public List<CatList> EposnowCatsSetting(int storeid, decimal tax, string BaseUrl, string Token)
-    {
-        List<CatList> clist = new List<CatList>();
+        private string AccessToken = "";
 
-        for (int i = 1; i <= 25; i++)
-        {
-            List<CatList> listc = EposNowCats(i, storeid, tax, BaseUrl, Token);
-            if (listc.Count != 0)
-            {
-                clist.AddRange(listc);
-                continue;
-            }
-            break;
-        }
-        return clist ;
-    }
-
-    //method for product api call  
-    public List<EposnowProdList.Root> EposNowProduct(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
-    {
-        List<EposnowProdList.Root> result = new List<EposnowProdList.Root>();
-        string text = null;
-        EposnowProdList.Root root = new EposnowProdList.Root();
-        RestClient restClient = new RestClient(BaseUrl + "Product/?page=" + PageNo + "&limit=200");
-        RestRequest restRequest = new RestRequest(Method.GET);
-        restRequest.AddHeader("Authorization", Token);
-        restRequest.AddHeader("Content-Type", "application/json");
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-        IRestResponse restResponse = restClient.Execute(restRequest);
-        List<Parameter> list = restResponse.Headers.ToList();
-        if (restResponse.StatusCode == HttpStatusCode.OK)
+        public clsEposNow(int StoreId, decimal tax, string BaseUrl, string RefreshToken)
         {
             try
             {
-                text = restResponse.Content;
-                List<EposnowProdList.Root> source = JsonConvert.DeserializeObject<List<EposnowProdList.Root>>(text, new JsonSerializerSettings
-                {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                result = source.ToList();
+                Console.WriteLine("Generating EposNow " + StoreId + " Product File....");
+                Console.WriteLine("Generating EposNow " + StoreId + " Fullname File....");
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex.Message + " EposNow " + StoreId);
             }
         }
-        return result;
-    }
 
-    //method for stock api call  
-    public List<EposnowStockList.Root> EposNowStock(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
-    {
-        List<JArray> list = new List<JArray>();
-        List<EposnowStockList.Root> result = new List<EposnowStockList.Root>();
-        string text = null;
-        Root root = new Root();
-        RestClient restClient = new RestClient(BaseUrl + "ProductStock?page=" + PageNo + "&limit=200");
-        restClient.Timeout = -1;
-        RestRequest restRequest = new RestRequest(Method.GET);
-        restRequest.AddHeader("Authorization", Token);
-        restRequest.AddHeader("Content-Type", "application/json");
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-        IRestResponse restResponse = restClient.Execute(restRequest);
-        List<Parameter> list2 = restResponse.Headers.ToList();
-        if (restResponse.StatusCode == HttpStatusCode.OK)
+        //method for productdetails
+        public List<EposnowProdList.Root> EposnowSetting(int StoreId, decimal tax, string BaseUrl, string Token)
         {
-            try
+            List<EposnowProdList.Root> list = new List<EposnowProdList.Root>();
+            for (int i = 1; i <= 25; i++)
             {
-                text = restResponse.Content;
-                List<EposnowStockList.Root> source = JsonConvert.DeserializeObject<List<EposnowStockList.Root>>(text, new JsonSerializerSettings
+                List<EposnowProdList.Root> list2 = EposNowProduct(i, StoreId, tax, BaseUrl, Token);
+                if (list2.Count != 0)
                 {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                result = source.ToList();
+                    list.AddRange(list2);
+                    continue;
+                }
+                break;
             }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-            }
+            return list;
         }
-        return result;
-    }
-    // method for categories api call 
-    public List<CatList> EposNowCats(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
-    {
-        List<CatList> result = new List<CatList>();
-        string text = null;
-        RestClient restClient = new RestClient(BaseUrl + "Category?page="+ PageNo + "&limit=200");
-        restClient.Timeout = -1;
-        RestRequest request = new RestRequest(Method.GET);
-        request.AddHeader("Authorization", Token);
-        request.AddHeader("Content-Type", "application/json");
-        ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
-        IRestResponse restResponse = restClient.Execute(request);
-        if (restResponse.StatusCode == HttpStatusCode.OK)
+
+        //method for stockdetails
+        public List<EposnowStockList.Root> EposnowStockSetting(int StoreId, decimal tax, string BaseUrl, string Token)
         {
-            try
+            List<EposnowStockList.Root> list = new List<EposnowStockList.Root>();
+            for (int i = 1; i <= 25; i++)
             {
-                text = restResponse.Content;
-                List<CatList> source = JsonConvert.DeserializeObject<List<CatList>>(text, new JsonSerializerSettings
+                List<EposnowStockList.Root> list2 = EposNowStock(i, StoreId, tax, BaseUrl, Token);
+                if (list2.Count != 0)
                 {
-                    NullValueHandling = NullValueHandling.Ignore
-                });
-                result = source.ToList();
+                    list.AddRange(list2);
+                    continue;
+                }
+                break;
             }
-            catch (Exception ex)
+            return list;
+        }
+        // method for category saving 
+        public List<CatList> EposnowCatsSetting(int storeid, decimal tax, string BaseUrl, string Token)
+        {
+            List<CatList> clist = new List<CatList>();
+
+            for (int i = 1; i <= 25; i++)
             {
-                Console.WriteLine(ex.Message);
+                List<CatList> listc = EposNowCats(i, storeid, tax, BaseUrl, Token);
+                if (listc.Count != 0)
+                {
+                    clist.AddRange(listc);
+                    continue;
+                }
+                break;
             }
+            return clist;
         }
 
-        return result;
-    }
+        //method for product api call  
+        public List<EposnowProdList.Root> EposNowProduct(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
+        {
+            List<EposnowProdList.Root> result = new List<EposnowProdList.Root>();
+            string text = null;
+            EposnowProdList.Root root = new EposnowProdList.Root();
+            RestClient restClient = new RestClient(BaseUrl + "Product/?page=" + PageNo + "&limit=200");
+            RestRequest restRequest = new RestRequest(Method.GET);
+            restRequest.AddHeader("Authorization", Token);
+            restRequest.AddHeader("Content-Type", "application/json");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            IRestResponse restResponse = restClient.Execute(restRequest);
+            List<Parameter> list = restResponse.Headers.ToList();
+            if (restResponse.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    text = restResponse.Content;
+                    List<EposnowProdList.Root> source = JsonConvert.DeserializeObject<List<EposnowProdList.Root>>(text, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    result = source.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return result;
+        }
 
- }
+        //method for stock api call  
+        public List<EposnowStockList.Root> EposNowStock(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
+        {
+            List<JArray> list = new List<JArray>();
+            List<EposnowStockList.Root> result = new List<EposnowStockList.Root>();
+            string text = null;
+            Root root = new Root();
+            RestClient restClient = new RestClient(BaseUrl + "ProductStock?page=" + PageNo + "&limit=200");
+            restClient.Timeout = -1;
+            RestRequest restRequest = new RestRequest(Method.GET);
+            restRequest.AddHeader("Authorization", Token);
+            restRequest.AddHeader("Content-Type", "application/json");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            IRestResponse restResponse = restClient.Execute(restRequest);
+            List<Parameter> list2 = restResponse.Headers.ToList();
+            if (restResponse.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    text = restResponse.Content;
+                    List<EposnowStockList.Root> source = JsonConvert.DeserializeObject<List<EposnowStockList.Root>>(text, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    result = source.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return result;
+        }
+        // method for categories api call 
+        public List<CatList> EposNowCats(int PageNo, int StoreId, decimal tax, string BaseUrl, string Token)
+        {
+            List<CatList> result = new List<CatList>();
+            string text = null;
+            RestClient restClient = new RestClient(BaseUrl + "Category?page=" + PageNo + "&limit=200");
+            restClient.Timeout = -1;
+            RestRequest request = new RestRequest(Method.GET);
+            request.AddHeader("Authorization", Token);
+            request.AddHeader("Content-Type", "application/json");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            IRestResponse restResponse = restClient.Execute(request);
+            if (restResponse.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    text = restResponse.Content;
+                    List<CatList> source = JsonConvert.DeserializeObject<List<CatList>>(text, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    result = source.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return result;
+        }
+        public List<containerFee> EposNowDepositAPI(string BaseUrl, string Token)//Added by PK on 08/01/2025
+        {
+            List<containerFee> result = new List<containerFee>();
+            string text = null;
+            RestClient restClient = new RestClient(BaseUrl + "ContainerFee");
+            restClient.Timeout = -1;
+            RestRequest request = new RestRequest(Method.GET);
+            request.AddHeader("Authorization", Token);
+            request.AddHeader("Content-Type", "application/json");
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
+            IRestResponse restResponse = restClient.Execute(request);
+            if (restResponse.StatusCode == HttpStatusCode.OK)
+            {
+                try
+                {
+                    text = restResponse.Content;
+                    List<containerFee> source = JsonConvert.DeserializeObject<List<containerFee>>(text, new JsonSerializerSettings
+                    {
+                        NullValueHandling = NullValueHandling.Ignore
+                    });
+                    result = source.ToList();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
+            return result;
+        }
+    }
+}
+

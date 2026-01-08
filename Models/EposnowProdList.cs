@@ -173,6 +173,8 @@ public class EposnowProdList
 		public List<object> ProductImages { get; set; }
 
 		public bool IsMultipleChoiceProductOptional { get; set; }
-	}
+		public int ContainerFeeId { get; set; } = 0;
+
+    }
 }
 

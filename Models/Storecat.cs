@@ -1,7 +1,10 @@
-﻿
-public class Storecat
+﻿namespace EposNow
 {
-	public string catid { get; set; }
+    public class Storecat
+    {
+        public string catid { get; set; }
 
-	public string catname { get; set; }
+        public string catname { get; set; }
+    }
 }
+

@@ -5,50 +5,53 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
 using EposNow;
-
-internal class Program
+namespace EposNow.Models
 {
-    private static void Main(string[] args)
+    public class Program
     {
-        string to = ConfigurationManager.AppSettings["DeveloperId"];
-        try
+        private static void Main(string[] args)
         {
-            POSSettings pOSSettings = new POSSettings();
-            pOSSettings.IntializeStoreSettings();
-            foreach (POSSetting posDetail in pOSSettings.PosDetails)
+            Console.Title = "EPOSNOW API";
+            string to = ConfigurationManager.AppSettings["DeveloperId"];
+            try
             {
-                try
+                POSSettings pOSSettings = new POSSettings();
+                pOSSettings.IntializeStoreSettings();
+                foreach (POSSetting posDetail in pOSSettings.PosDetails)
                 {
-                    if (posDetail.StoreSettings.StoreId == 11395)
+                    try
                     {
-                        Console.WriteLine("Fetching store_id : " + posDetail.StoreSettings.StoreId);
+                        /*if (posDetail.StoreSettings.StoreId == 11083)
+                        {
+                            Console.WriteLine("Fetching storeId : " + posDetail.StoreSettings.StoreId);
+                        }
+                        else
+                        {
+                            continue;
+                        }*/
+                        if (posDetail.PosName.ToUpper() == "EPOSNOW" && posDetail.StoreSettings.POSSettings.IsApi)
+                        {
+                            EposnowCsvProducts eposnowCsvProducts = new EposnowCsvProducts(posDetail.StoreSettings.StoreId, posDetail.StoreSettings.POSSettings.tax, posDetail.StoreSettings.POSSettings.BaseUrl, posDetail.StoreSettings.POSSettings.Token);
+                            Console.WriteLine();
+                        }
                     }
-                    else
+                    catch (Exception ex)
                     {
-                        continue;
+                        Console.WriteLine(ex.Message);
                     }
-                    if (posDetail.PosName.ToUpper() == "EPOSNOW" && posDetail.StoreSettings.POSSettings.IsApi)
+                    finally
                     {
-                        EposnowCsvProducts eposnowCsvProducts = new EposnowCsvProducts(posDetail.StoreSettings.StoreId, posDetail.StoreSettings.POSSettings.tax, posDetail.StoreSettings.POSSettings.BaseUrl, posDetail.StoreSettings.POSSettings.Token);
-                        Console.WriteLine();
                     }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
                 }
             }
-        }
-        catch (Exception ex2)
-        {
-            new clsEmail().sendEmail(to, "", "", "Error in EposNow @" + DateTime.UtcNow.ToString() + " GMT", ex2.Message + "<br/>" + ex2.StackTrace);
-            Console.WriteLine(ex2.Message);
-        }
-        finally
-        {
+            catch (Exception ex2)
+            {
+                new clsEmail().sendEmail(to, "", "", "Error in EposNow @" + DateTime.UtcNow.ToString() + " GMT", ex2.Message + "<br/>" + ex2.StackTrace);
+                Console.WriteLine(ex2.Message);
+            }
+            finally
+            {
+            }
         }
     }
 }

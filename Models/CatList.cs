@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace EposNow.Models
 {
-   public class CatList
+    public class CatList
     {
    
         public int Id { get; set; }
@@ -44,5 +44,11 @@ namespace EposNow.Models
         public int? CourseId { get; set; }
 
         public int? ButtonColourId { get; set; }
+    }
+    public class containerFee
+    {
+        public int ContainerFeeId { get; set; }
+        public string Name {  set; get; }
+        public decimal FeeValue { get; set; }
     }
 }

@@ -70,24 +70,18 @@
   <ItemGroup>
     <Compile Include="clsEmail.cs" />
     <Compile Include="clsEposNow.cs" />
-    <Compile Include="EposnowCatList.cs" />
+    <Compile Include="Models\EposnowCatList.cs" />
     <Compile Include="EposnowCsvProducts.cs" />
-    <Compile Include="EposnowProdList.cs" />
-    <Compile Include="EposnowStockList.cs" />
-    <Compile Include="Models\categories.cs" />
+    <Compile Include="Models\EposnowProdList.cs" />
+    <Compile Include="Models\EposnowStockList.cs" />
     <Compile Include="Models\CatList.cs" />
     <Compile Include="Models\FullNameProductModel.cs" />
     <Compile Include="Models\GenerateCSV.cs" />
     <Compile Include="Models\Item.cs" />
-    <Compile Include="Models\Paginator.cs" />
-    <Compile Include="Models\POSSetting.cs" />
     <Compile Include="Models\POSSettings.cs" />
     <Compile Include="Models\ProductsModel.cs" />
     <Compile Include="Models\Root.cs" />
-    <Compile Include="Models\Setting.cs" />
     <Compile Include="Models\Storecat.cs" />
-    <Compile Include="Models\StoreSetting.cs" />
-    <Compile Include="Models\UPC.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
