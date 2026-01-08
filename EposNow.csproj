@@ -75,6 +75,7 @@
     <Compile Include="EposnowProdList.cs" />
     <Compile Include="EposnowStockList.cs" />
     <Compile Include="Models\categories.cs" />
+    <Compile Include="Models\CatList.cs" />
     <Compile Include="Models\FullNameProductModel.cs" />
     <Compile Include="Models\GenerateCSV.cs" />
     <Compile Include="Models\Item.cs" />

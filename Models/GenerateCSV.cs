@@ -59,6 +59,7 @@ public class GenerateCSV
 
 	public static string GenerateCSVFile<T>(IList<T> list, string Name, int StoreId, string BaseUrl)
 	{
+		Console.WriteLine("GenerateCSVmetod entry");
 		if (list == null || list.Count == 0)
 		{
 			return "";
@@ -80,16 +81,17 @@ public class GenerateCSV
 			streamWriter.Write(propertyInfo.Name + ",");
 		}
 		streamWriter.Write(newLine);
-		foreach (T item in list)
-		{
-			PropertyInfo[] array2 = properties;
-			foreach (PropertyInfo propertyInfo2 in array2)
-			{
-				string value = Convert.ToString(item.GetType().GetProperty(propertyInfo2.Name).GetValue(item, null)).Replace(',', ' ') + ",";
-				streamWriter.Write(value);
-			}
-			streamWriter.Write(newLine);
-		}
+        foreach (T item in list)
+        {
+            PropertyInfo[] array2 = properties;
+            foreach (PropertyInfo propertyInfo2 in array2)
+            {
+                string value = Convert.ToString(item.GetType().GetProperty(propertyInfo2.Name).GetValue(item, null)).Replace(',', ' ') + ",";
+                streamWriter.Write(value);
+            }
+            streamWriter.Write(newLine);
+        }
+		
 		return text;
 	}
 
